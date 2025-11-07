@@ -30,7 +30,7 @@ fun InitialScreen(
             .fillMaxSize()
             .background( // Fondo con gradiente vertical desde gris a negro
                 Brush.verticalGradient(
-                    colors = listOf(secondaryGray, secondaryBlack),
+                    colors = listOf(secondaryGray, primaryWhite),
                     startY = 0f,
                     endY = 220f
                 )
@@ -44,20 +44,20 @@ fun InitialScreen(
         Image(
             painter = painterResource(id = R.drawable.logo_initial),
             contentDescription = "App Logo",
-            modifier = Modifier.size(180.dp)
+            modifier = Modifier.size(200.dp)
         )
 
         // Textos principales: slogan y llamada a la acción
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "Scan license plates",
-                color = Color.White,
+                text = "Identify your flowers",
+                color = primaryPurple,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = "in seconds",
-                color = Color.White,
+                color = primaryPurple,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -106,7 +106,7 @@ fun InitialScreen(
             // Texto clickeable para navegar al login
             Text(
                 text = "Log in",
-                color = primaryWhite,
+                color = primaryPurple,
                 modifier = Modifier
                     .padding(top = 16.dp)
                     .clickable { navigateToLogin() },

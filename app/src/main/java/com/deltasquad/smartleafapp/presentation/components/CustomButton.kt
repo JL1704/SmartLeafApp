@@ -15,6 +15,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.deltasquad.smartleafapp.presentation.theme.primaryGreen
+import com.deltasquad.smartleafapp.presentation.theme.primaryPurple
 import com.deltasquad.smartleafapp.presentation.theme.primaryWhite
 import com.deltasquad.smartleafapp.presentation.theme.secondaryBlack
 
@@ -30,8 +32,8 @@ fun CustomButton(
             .fillMaxWidth()
             .height(48.dp)
             .padding(horizontal = 32.dp)
-            .background(secondaryBlack, CircleShape)       // Fondo negro y forma circular
-            .border(2.dp, primaryWhite, CircleShape)       // Borde blanco
+            .background(primaryPurple, CircleShape)       // Fondo negro y forma circular
+            .border(2.dp, primaryGreen, CircleShape)       // Borde blanco
             .clickable { onClick() },                      // Soporte para clics
         contentAlignment = Alignment.Center
     ) {
