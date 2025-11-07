@@ -64,7 +64,7 @@ fun InitialScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Sign up for free",
-                color = secondaryGreen,
+                color = primaryGreen,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold
             )

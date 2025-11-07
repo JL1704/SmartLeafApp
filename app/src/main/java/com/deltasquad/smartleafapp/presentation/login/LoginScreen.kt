@@ -26,6 +26,9 @@ import com.deltasquad.smartleafapp.presentation.theme.primaryGreen
 import com.deltasquad.smartleafapp.presentation.theme.secondaryGreen
 import com.google.firebase.auth.FirebaseAuth
 import com.deltasquad.smartleafapp.R
+import com.deltasquad.smartleafapp.presentation.theme.primaryPurple
+import com.deltasquad.smartleafapp.presentation.theme.primaryWhite
+import com.deltasquad.smartleafapp.presentation.theme.secondaryGray
 
 @Composable
 fun LoginScreen(
@@ -54,7 +57,7 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Black)
+                .background(primaryWhite)
                 .padding(horizontal = 24.dp)
                 .padding(top = 12.dp)
                 .padding(innerPadding),
@@ -70,7 +73,7 @@ fun LoginScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_back_24),
                     contentDescription = "Back",
-                    tint = White,
+                    tint = secondaryGray,
                     modifier = Modifier
                         .size(28.dp)
                         .clickable {
@@ -79,7 +82,7 @@ fun LoginScreen(
                 )
                 Text(
                     text = "Log In",
-                    color = White,
+                    color = primaryPurple,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -90,7 +93,7 @@ fun LoginScreen(
             }
 
             // Email
-            Text("Email", color = White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text("Email", color = primaryPurple, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             TextField(
                 value = email,
                 onValueChange = { email = it },
@@ -117,7 +120,7 @@ fun LoginScreen(
             )
 
             // Password
-            Text("Password", color = White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text("Password", color = primaryPurple, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             TextField(
                 value = password,
                 onValueChange = { password = it },

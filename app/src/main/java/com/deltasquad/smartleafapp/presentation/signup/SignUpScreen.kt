@@ -46,6 +46,9 @@ import com.deltasquad.smartleafapp.R
 import com.deltasquad.smartleafapp.presentation.theme.SelectedField
 import com.deltasquad.smartleafapp.presentation.theme.UnSelectedField
 import com.deltasquad.smartleafapp.presentation.theme.primaryGreen
+import com.deltasquad.smartleafapp.presentation.theme.primaryPurple
+import com.deltasquad.smartleafapp.presentation.theme.primaryWhite
+import com.deltasquad.smartleafapp.presentation.theme.secondaryGray
 import com.deltasquad.smartleafapp.presentation.theme.secondaryGreen
 import com.google.firebase.auth.FirebaseAuth
 
@@ -76,7 +79,7 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Black)
+                .background(primaryWhite)
                 .padding(horizontal = 24.dp)
                 .padding(top = 12.dp)
                 .padding(innerPadding),
@@ -91,7 +94,7 @@ fun SignUpScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_back_24),
                     contentDescription = "Back",
-                    tint = White,
+                    tint = secondaryGray,
                     modifier = Modifier
                         .size(28.dp)
                         .clickable { navController.popBackStack() }
@@ -99,7 +102,7 @@ fun SignUpScreen(
 
                 Text(
                     text = "Create Account",
-                    color = White,
+                    color = primaryPurple,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -110,7 +113,7 @@ fun SignUpScreen(
             }
 
             // Email
-            Text("Email", color = White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text("Email", color = primaryPurple, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             TextField(
                 value = email,
                 onValueChange = { email = it },
@@ -137,7 +140,7 @@ fun SignUpScreen(
             )
 
             // Password
-            Text("Password", color = White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text("Password", color = primaryPurple, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             TextField(
                 value = password,
                 onValueChange = { password = it },
