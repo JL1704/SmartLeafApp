@@ -26,7 +26,7 @@ import com.deltasquad.smartleafapp.R
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PSTopAppBar(onMenuClick: () -> Unit) {
+fun SLTopAppBar(onMenuClick: () -> Unit) {
     TopAppBar(
         title = {
             Row(
@@ -38,7 +38,7 @@ fun PSTopAppBar(onMenuClick: () -> Unit) {
                     Icon(
                         imageVector = Icons.Default.Menu,
                         contentDescription = "Menu Icon",
-                        tint = primaryWhite
+                        tint = primaryGreen
                     )
                 }
 
@@ -51,7 +51,7 @@ fun PSTopAppBar(onMenuClick: () -> Unit) {
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.logo),
+                        painter = painterResource(id = R.drawable.logo_sl),
                         contentDescription = "App Logo",
                         modifier = Modifier.height(PlateScanAppTheme.dimens.imageHeightNormal)
                     )
@@ -61,7 +61,7 @@ fun PSTopAppBar(onMenuClick: () -> Unit) {
                 Spacer(modifier = Modifier.width(PlateScanAppTheme.dimens.spacerLarge)) // Ajusta si es necesario
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryGreen),
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryWhite),
         windowInsets = TopAppBarDefaults.windowInsets
 
     )
@@ -74,6 +74,6 @@ fun PSTopAppBar(onMenuClick: () -> Unit) {
 @Composable
 fun PSTopAppBarPreview() {
     PlateScanAppTheme {
-        PSTopAppBar(onMenuClick = {})
+        SLTopAppBar(onMenuClick = {})
     }
 }

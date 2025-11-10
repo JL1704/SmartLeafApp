@@ -74,14 +74,6 @@ class MainActivity : ComponentActivity() {
                 // Controlador del sistema para manipular la UI del sistema (barra de estado, etc.)
                 val systemUiController = rememberSystemUiController()
 
-                // Establece la barra de estado como transparente y con iconos claros
-                SideEffect {
-                    systemUiController.setSystemBarsColor(
-                        color = Transparent,
-                        darkIcons = false
-                    )
-                }
-
                 // Estructura base para la UI de Compose con soporte de padding
                 Scaffold(
                     modifier = Modifier.fillMaxSize()

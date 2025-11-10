@@ -26,7 +26,7 @@ class GoogleAuthUiClient(
         .setGoogleIdTokenRequestOptions(
             BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                 .setSupported(true)
-                .setServerClientId("814636271181-kkc7u6ndrfrlsprnvajtdddi2v8u67go.apps.googleusercontent.com") // ID de cliente web desde Firebase Console
+                .setServerClientId("783674024663-8si3qsf1f0025iskuneutrkgota83k58.apps.googleusercontent.com") // ID de cliente web desde Firebase Console
                 .setFilterByAuthorizedAccounts(false) // Permite seleccionar cualquier cuenta de Google
                 .build()
         )

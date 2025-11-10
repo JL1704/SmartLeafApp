@@ -31,7 +31,7 @@ fun BottomNavigationView(
     )
 
     NavigationBar(
-        containerColor = primaryGreen,
+        containerColor = primaryWhite,
         modifier = modifier
             .fillMaxWidth()
             .height(PlateScanAppTheme.dimens.bottomNavViewHeight)
@@ -45,17 +45,12 @@ fun BottomNavigationView(
                     Icon(
                         painter = painterResource(id = item.icon),
                         contentDescription = item.label,
-                        tint = primaryWhite
+                        tint = primaryGreen
                     )
-                },
-                label = {
-                    Text(item.label, color = primaryWhite)
                 },
                 alwaysShowLabel = true,
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = primaryWhite,
-                    unselectedIconColor = primaryWhite,
-                    indicatorColor = primaryBrown
+                    indicatorColor = primaryPurple
                 )
             )
         }

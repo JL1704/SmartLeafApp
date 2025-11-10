@@ -32,7 +32,7 @@ fun InitialScreen(
                 Brush.verticalGradient(
                     colors = listOf(secondaryGray, primaryWhite),
                     startY = 0f,
-                    endY = 220f
+                    endY = 110f
                 )
             ),
         verticalArrangement = Arrangement.SpaceBetween,

@@ -21,7 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.deltasquad.smartleafapp.presentation.camera.CameraScreenEntryPoint
 import com.deltasquad.smartleafapp.presentation.components.BottomNavigationView
-import com.deltasquad.smartleafapp.presentation.components.PSTopAppBar
+import com.deltasquad.smartleafapp.presentation.components.SLTopAppBar
 import com.deltasquad.smartleafapp.presentation.details.DetailsScreen
 import com.deltasquad.smartleafapp.presentation.editdata.EditDataScreen
 import com.deltasquad.smartleafapp.presentation.editprofile.EditProfileScreen
@@ -119,7 +119,7 @@ fun NavigationWrapper(
     ) {
         Scaffold(
             topBar = {
-                PSTopAppBar(onMenuClick = {
+                SLTopAppBar(onMenuClick = {
                     coroutineScope.launch { drawerState.open() } // Abre el drawer al hacer clic
                 })
             },
