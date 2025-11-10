@@ -31,6 +31,8 @@ import android.view.WindowManager
 import androidx.compose.foundation.background
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import com.deltasquad.smartleafapp.presentation.theme.primaryPurple
+import com.deltasquad.smartleafapp.presentation.theme.primaryWhite
 
 @Composable
 fun CameraScreen(viewModel: CameraViewModel = viewModel()) {
@@ -70,9 +72,9 @@ fun CameraScreen(viewModel: CameraViewModel = viewModel()) {
                     }
                 },
                 modifier = Modifier.fillMaxWidth(0.6f),
-                colors = ButtonDefaults.buttonColors(Color.Cyan)
+                colors = ButtonDefaults.buttonColors(primaryPurple)
             ) {
-                Text("Scan Plate", color = Color.Black, fontWeight = FontWeight.Bold)
+                Text("Scan flower", color = primaryWhite, fontWeight = FontWeight.Bold)
             }
         }
     }
