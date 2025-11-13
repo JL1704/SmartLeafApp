@@ -1,62 +1,47 @@
 package com.deltasquad.smartleafapp.presentation.details
 
 import androidx.lifecycle.ViewModel
-import com.deltasquad.smartleafapp.data.model.ScanRecord
+import com.deltasquad.smartleafapp.data.model.FlowerResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class DetailViewModel : ViewModel() {
+class DetailsViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
-    private val _scanRecord = MutableStateFlow<ScanRecord?>(null)
-    val scanRecord: StateFlow<ScanRecord?> = _scanRecord
+    private val _flower = MutableStateFlow<FlowerResponse?>(null)
+    val flower: StateFlow<FlowerResponse?> = _flower
 
-    fun fetchScanById(scanId: String) {
+    fun fetchFlowerById(flowerId: String) {
         val user = auth.currentUser ?: return
         db.collection("users")
             .document(user.uid)
-            .collection("scans")
-            .document(scanId)
+            .collection("flowers")
+            .document(flowerId)
             .get()
             .addOnSuccessListener { result ->
-                val scan = result.toObject(ScanRecord::class.java)
-                _scanRecord.value = scan
+                val data = result.toObject(FlowerResponse::class.java)
+                _flower.value = data
+            }
+            .addOnFailureListener {
+                _flower.value = null
             }
     }
 
-    fun deleteScanById(scanId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        val user = auth.currentUser ?: return
-        db.collection("users")
-            .document(user.uid)
-            .collection("scans")
-            .document(scanId)
-            .delete()
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
-    }
-
-    fun updateScanData(
-        scanId: String,
-        updatedData: Map<String, Any>,
+    fun deleteFlowerById(
+        flowerId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         val user = auth.currentUser ?: return
         db.collection("users")
             .document(user.uid)
-            .collection("scans")
-            .document(scanId)
-            .update(updatedData)
+            .collection("flowers")
+            .document(flowerId)
+            .delete()
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it) }
     }
-
-
 }

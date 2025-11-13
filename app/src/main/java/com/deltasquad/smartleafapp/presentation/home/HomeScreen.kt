@@ -9,7 +9,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.deltasquad.smartleafapp.presentation.components.*
 import com.deltasquad.smartleafapp.presentation.navigation.Screen
-import com.deltasquad.smartleafapp.presentation.theme.PlateScanAppTheme
 
 @Composable
 fun HomeScreen(
@@ -43,7 +42,7 @@ fun HomeScreen(
             )
         }
 
-        // 🔘 Botones de acción (si los tienes definidos)
+        // 🔘 Botones de acción
         item { ButtonGroup(navController = navController) }
 
         if (query.isBlank()) {
@@ -55,9 +54,9 @@ fun HomeScreen(
                     confidence = flower.confidence,
                     date = flower.timestamp,
                     onClick = {
-                        navController.navigate(
-                            Screen.Details.createRoute(flower.class_supervised ?: "unknown")
-                        )
+                        flower.id?.let { id ->
+                            navController.navigate(Screen.Details.createRoute(id))
+                        }
                     }
                 )
             }
@@ -70,9 +69,9 @@ fun HomeScreen(
                     confidence = flower.confidence,
                     date = flower.timestamp,
                     onClick = {
-                        navController.navigate(
-                            Screen.Details.createRoute(flower.class_supervised ?: "unknown")
-                        )
+                        flower.id?.let { id ->
+                            navController.navigate(Screen.Details.createRoute(id))
+                        }
                     }
                 )
             }

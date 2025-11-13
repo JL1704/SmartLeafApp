@@ -17,7 +17,6 @@ class RecordsViewModel : ViewModel() {
     private val _filteredFlowers = MutableStateFlow<List<FlowerResponse>>(emptyList())
     val filteredFlowers: StateFlow<List<FlowerResponse>> = _filteredFlowers
 
-    // Lista completa para búsqueda
     private var allFlowerList: List<FlowerResponse> = emptyList()
 
     /** 🔹 Carga todos los registros de flores del usuario actual */
@@ -30,7 +29,8 @@ class RecordsViewModel : ViewModel() {
             .get()
             .addOnSuccessListener { result ->
                 val flowers = result.mapNotNull { doc ->
-                    doc.toObject(FlowerResponse::class.java)
+                    val flower = doc.toObject(FlowerResponse::class.java)
+                    flower?.copy(id = doc.id) // 💡 Guardamos el ID del documento
                 }
                 allFlowerList = flowers
                 _allFlowers.value = flowers

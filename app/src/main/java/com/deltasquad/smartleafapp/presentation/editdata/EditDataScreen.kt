@@ -13,10 +13,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.deltasquad.smartleafapp.presentation.components.SectionLabel
-import com.deltasquad.smartleafapp.presentation.details.DetailViewModel
+//import com.deltasquad.smartleafapp.presentation.details.DetailViewModel
 import com.deltasquad.smartleafapp.presentation.theme.primaryGreen
 import com.deltasquad.smartleafapp.R
-
+/*
 @Composable
 fun EditDataScreen(
     scanId: String,
@@ -158,3 +158,4 @@ fun EditDataScreen(
         }
     }
 }
+*/

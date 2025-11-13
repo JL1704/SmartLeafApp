@@ -31,7 +31,8 @@ class HomeViewModel : ViewModel() {
             .get()
             .addOnSuccessListener { result ->
                 val flowers = result.mapNotNull { doc ->
-                    doc.toObject(FlowerResponse::class.java)
+                    val flower = doc.toObject(FlowerResponse::class.java)
+                    flower?.copy(id = doc.id) // 💡 Guardamos el ID del documento
                 }
                 _latestFlowers.value = flowers
             }
@@ -47,7 +48,8 @@ class HomeViewModel : ViewModel() {
             .get()
             .addOnSuccessListener { result ->
                 val flowers = result.mapNotNull { doc ->
-                    doc.toObject(FlowerResponse::class.java)
+                    val flower = doc.toObject(FlowerResponse::class.java)
+                    flower?.copy(id = doc.id) // 💡 Guardamos el ID del documento
                 }
                 allFlowers = flowers
                 _filteredFlowers.value = flowers
@@ -65,4 +67,3 @@ class HomeViewModel : ViewModel() {
         }
     }
 }
-

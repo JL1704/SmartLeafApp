@@ -17,14 +17,12 @@ import com.deltasquad.smartleafapp.presentation.components.ContentCard
 import com.deltasquad.smartleafapp.presentation.components.SearchBar
 import com.deltasquad.smartleafapp.presentation.components.SectionLabel
 import com.deltasquad.smartleafapp.presentation.navigation.Screen
-import com.deltasquad.smartleafapp.presentation.theme.PlateScanAppTheme
 
 @Composable
 fun RecordsScreen(
     navController: NavHostController,
     viewModel: RecordsViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
-    val allFlowers by viewModel.allFlowers.collectAsState()
     val filteredFlowers by viewModel.filteredFlowers.collectAsState()
     var query by remember { mutableStateOf("") }
 
@@ -41,10 +39,8 @@ fun RecordsScreen(
                 .padding(top = 16.dp, bottom = 16.dp)
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_back_24),
@@ -53,18 +49,14 @@ fun RecordsScreen(
                     modifier = Modifier
                         .padding(start = 16.dp)
                         .size(28.dp)
-                        .clickable {
-                            navController.popBackStack()
-                        }
+                        .clickable { navController.popBackStack() }
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 SectionLabel(
                     text = "Clasificaciones de Flores",
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(end = 44.dp)
+                    modifier = Modifier.align(Alignment.CenterVertically)
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -96,9 +88,10 @@ fun RecordsScreen(
                     confidence = flower.confidence,
                     date = flower.timestamp,
                     onClick = {
-                        navController.navigate(
-                            Screen.Details.createRoute(flower.class_supervised ?: "unknown")
-                        )
+                        // 💡 Navegamos con el ID del documento
+                        flower.id?.let { id ->
+                            navController.navigate(Screen.Details.createRoute(id))
+                        }
                     }
                 )
             }

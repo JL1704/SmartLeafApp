@@ -23,7 +23,7 @@ import com.deltasquad.smartleafapp.presentation.camera.CameraScreenEntryPoint
 import com.deltasquad.smartleafapp.presentation.components.BottomNavigationView
 import com.deltasquad.smartleafapp.presentation.components.SLTopAppBar
 import com.deltasquad.smartleafapp.presentation.details.DetailsScreen
-import com.deltasquad.smartleafapp.presentation.editdata.EditDataScreen
+//import com.deltasquad.smartleafapp.presentation.editdata.EditDataScreen
 import com.deltasquad.smartleafapp.presentation.editprofile.EditProfileScreen
 import com.deltasquad.smartleafapp.presentation.home.HomeScreen
 import com.deltasquad.smartleafapp.presentation.profile.ProfileScreen
@@ -43,6 +43,7 @@ import com.deltasquad.smartleafapp.presentation.detailsreport.DetailsReportScree
 import com.deltasquad.smartleafapp.presentation.reports.CreateReportScreen
 import kotlinx.coroutines.launch
 import com.deltasquad.smartleafapp.R
+import kotlinx.coroutines.flow.flow
 
 @Composable
 fun NavigationWrapper(
@@ -180,15 +181,15 @@ fun NavigationWrapper(
                     StatsScreen(navController = navController, userId = userId)
                 }
 
-                composable("details/{scanId}") { backStackEntry ->
-                    val scanId = backStackEntry.arguments?.getString("scanId") ?: ""
-                    DetailsScreen(scanId = scanId, navController)
+                composable("details/{flowerId}") { backStackEntry ->
+                    val flowerId = backStackEntry.arguments?.getString("flowerId") ?: ""
+                    DetailsScreen(flowerId = flowerId, navController)
                 }
 
-                composable(Screen.EditData.route) { backStackEntry ->
-                    val scanId = backStackEntry.arguments?.getString("scanId") ?: ""
-                    EditDataScreen(scanId = scanId, navController = navController)
-                }
+//                composable(Screen.EditData.route) { backStackEntry ->
+//                    val scanId = backStackEntry.arguments?.getString("scanId") ?: ""
+//                    EditDataScreen(scanId = scanId, navController = navController)
+//                }
                 composable(Screen.CreateReport.route) {
                     CreateReportScreen(navController)
                 }
