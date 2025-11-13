@@ -12,19 +12,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import android.net.Uri
 import coil.compose.AsyncImage
+import com.deltasquad.smartleafapp.R
 import com.deltasquad.smartleafapp.presentation.theme.PlateScanAppTheme
 
 @Composable
 fun ContentCard(
-    croppedImage: Uri,
-    plate: String,
-    date: String,
-    state: String,
+    imageUrl: String?,
+    classSupervised: String?,
+    confidence: Float?,
+    date: String?,
     onClick: () -> Unit
 ) {
     Card(
@@ -40,36 +39,36 @@ fun ContentCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                model = croppedImage,
-                contentDescription = "Placa del vehículo",
+                model = imageUrl,
+                contentDescription = "Imagen de flor",
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(90.dp)
                     .padding(end = PlateScanAppTheme.dimens.paddingNormal),
-                error = painterResource(com.deltasquad.smartleafapp.R.drawable.placeholder),
-                placeholder = painterResource(com.deltasquad.smartleafapp.R.drawable.placeholder)
+                error = painterResource(R.drawable.placeholder),
+                placeholder = painterResource(R.drawable.placeholder)
             )
-            Column {
+
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
-                    text = plate,
+                    text = classSupervised ?: "Desconocida",
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
-                Text(text = date, fontSize = 14.sp, color = Color.Gray)
-                Text(text = "State: $state", fontSize = 14.sp)
+                confidence?.let {
+                    Text(
+                        text = "Confianza: ${(it * 100).toInt()}%",
+                        fontSize = 14.sp,
+                        color = Color.Gray
+                    )
+                }
+                date?.let {
+                    Text(
+                        text = "Fecha: $it",
+                        fontSize = 13.sp,
+                        color = Color.Gray
+                    )
+                }
             }
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun ContentCardPreview() {
-    ContentCard(
-        croppedImage = Uri.parse("content://media/external/images/media/1000000072"),
-        plate = "8806 KZS",
-        date = "01/02/2025",
-        state = "success",
-        onClick = {}
-    )
 }

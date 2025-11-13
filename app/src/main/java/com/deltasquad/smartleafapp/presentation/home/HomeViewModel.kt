@@ -1,66 +1,68 @@
 package com.deltasquad.smartleafapp.presentation.home
 
 import androidx.lifecycle.ViewModel
-import com.deltasquad.smartleafapp.data.model.ScanRecord
+import com.deltasquad.smartleafapp.data.model.FlowerResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class HomeViewModel : ViewModel() {
+
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
-    private val _latestScans = MutableStateFlow<List<ScanRecord>>(emptyList())
-    val latestScans: StateFlow<List<ScanRecord>> = _latestScans
+    private val _latestFlowers = MutableStateFlow<List<FlowerResponse>>(emptyList())
+    val latestFlowers: StateFlow<List<FlowerResponse>> = _latestFlowers
 
-    private val _filteredScans = MutableStateFlow<List<ScanRecord>>(emptyList())
-    val filteredScans: StateFlow<List<ScanRecord>> = _filteredScans
+    private val _filteredFlowers = MutableStateFlow<List<FlowerResponse>>(emptyList())
+    val filteredFlowers: StateFlow<List<FlowerResponse>> = _filteredFlowers
 
-    // Guarda todas las placas para filtrado
-    private var allScans: List<ScanRecord> = emptyList()
+    private var allFlowers: List<FlowerResponse> = emptyList()
 
-    fun fetchLatestScans() {
+    /** 🔹 Obtiene las 5 clasificaciones más recientes */
+    fun fetchLatestFlowers() {
         val user = auth.currentUser ?: return
         db.collection("users")
             .document(user.uid)
-            .collection("scans")
-            .orderBy("date", com.google.firebase.firestore.Query.Direction.DESCENDING)
+            .collection("flowers")
+            .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
             .limit(5)
             .get()
             .addOnSuccessListener { result ->
-                val scans = result.mapNotNull { doc ->
-                    doc.toObject(ScanRecord::class.java)?.copy(id = doc.id)
+                val flowers = result.mapNotNull { doc ->
+                    doc.toObject(FlowerResponse::class.java)
                 }
-                _latestScans.value = scans
+                _latestFlowers.value = flowers
             }
     }
 
-    fun fetchAllScans() {
+    /** 🔹 Carga todas las flores clasificadas */
+    fun fetchAllFlowers() {
         val user = auth.currentUser ?: return
         db.collection("users")
             .document(user.uid)
-            .collection("scans")
-            .orderBy("date", com.google.firebase.firestore.Query.Direction.DESCENDING)
+            .collection("flowers")
+            .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
-                val scans = result.mapNotNull { doc ->
-                    doc.toObject(ScanRecord::class.java)?.copy(id = doc.id)
+                val flowers = result.mapNotNull { doc ->
+                    doc.toObject(FlowerResponse::class.java)
                 }
-                allScans = scans
-                _filteredScans.value = scans // Inicialmente sin filtro
+                allFlowers = flowers
+                _filteredFlowers.value = flowers
             }
     }
 
-    fun filterScans(query: String) {
-        _filteredScans.value = if (query.isBlank()) {
-            emptyList()
+    /** 🔹 Filtro por nombre de flor */
+    fun filterFlowers(query: String) {
+        _filteredFlowers.value = if (query.isBlank()) {
+            allFlowers
         } else {
-            allScans.filter {
-                it.plate.contains(query, ignoreCase = true)
+            allFlowers.filter {
+                it.class_supervised?.contains(query, ignoreCase = true) == true
             }
         }
     }
-
 }
 

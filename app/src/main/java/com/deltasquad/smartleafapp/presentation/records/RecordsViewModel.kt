@@ -1,7 +1,7 @@
 package com.deltasquad.smartleafapp.presentation.records
 
 import androidx.lifecycle.ViewModel
-import com.deltasquad.smartleafapp.data.model.ScanRecord
+import com.deltasquad.smartleafapp.data.model.FlowerResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,52 +11,40 @@ class RecordsViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
-    private val _allScans = MutableStateFlow<List<ScanRecord>>(emptyList())
-    val allScans: StateFlow<List<ScanRecord>> = _allScans
+    private val _allFlowers = MutableStateFlow<List<FlowerResponse>>(emptyList())
+    val allFlowers: StateFlow<List<FlowerResponse>> = _allFlowers
 
-    private val _filteredScans = MutableStateFlow<List<ScanRecord>>(emptyList())
-    val filteredScans: StateFlow<List<ScanRecord>> = _filteredScans
+    private val _filteredFlowers = MutableStateFlow<List<FlowerResponse>>(emptyList())
+    val filteredFlowers: StateFlow<List<FlowerResponse>> = _filteredFlowers
 
-    // Guarda todas las placas para filtrado
-    private var allScan: List<ScanRecord> = emptyList()
+    // Lista completa para búsqueda
+    private var allFlowerList: List<FlowerResponse> = emptyList()
 
-    fun allScans() {
+    /** 🔹 Carga todos los registros de flores del usuario actual */
+    fun fetchAllFlowers() {
         val user = auth.currentUser ?: return
         db.collection("users")
             .document(user.uid)
-            .collection("scans")
-            .orderBy("date", com.google.firebase.firestore.Query.Direction.DESCENDING)
+            .collection("flowers")
+            .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
-                val scans = result.mapNotNull { doc ->
-                    doc.toObject(ScanRecord::class.java)?.copy(id = doc.id)
+                val flowers = result.mapNotNull { doc ->
+                    doc.toObject(FlowerResponse::class.java)
                 }
-                _allScans.value = scans
+                allFlowerList = flowers
+                _allFlowers.value = flowers
+                _filteredFlowers.value = flowers
             }
     }
 
-    fun fetchAllScans() {
-        val user = auth.currentUser ?: return
-        db.collection("users")
-            .document(user.uid)
-            .collection("scans")
-            .orderBy("date", com.google.firebase.firestore.Query.Direction.DESCENDING)
-            .get()
-            .addOnSuccessListener { result ->
-                val scans = result.mapNotNull { doc ->
-                    doc.toObject(ScanRecord::class.java)?.copy(id = doc.id)
-                }
-                allScan = scans
-                _filteredScans.value = scans // Inicialmente sin filtro
-            }
-    }
-
-    fun filterScans(query: String) {
-        _filteredScans.value = if (query.isBlank()) {
-            emptyList()
+    /** 🔹 Filtra flores por nombre */
+    fun filterFlowers(query: String) {
+        _filteredFlowers.value = if (query.isBlank()) {
+            allFlowerList
         } else {
-            allScan.filter {
-                it.plate.contains(query, ignoreCase = true)
+            allFlowerList.filter { flower ->
+                flower.class_supervised?.contains(query, ignoreCase = true) == true
             }
         }
     }
