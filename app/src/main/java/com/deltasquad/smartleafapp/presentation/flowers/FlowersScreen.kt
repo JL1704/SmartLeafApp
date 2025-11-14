@@ -19,6 +19,7 @@ import com.deltasquad.smartleafapp.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
+import com.deltasquad.smartleafapp.presentation.theme.primaryPurple
 
 @Composable
 fun FlowersScreen(
@@ -45,20 +46,21 @@ fun FlowersScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_back_24),
                     contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = primaryPurple,
                     modifier = Modifier
                         .size(28.dp)
-                        .padding(end = 8.dp)
                         .clickable {
                             navController.popBackStack()
                         }
                 )
-
+                Spacer(modifier = Modifier.weight(1f))
                 SectionLabel(
                     text = "Flowers",
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
+                        .padding(end = 44.dp)
                 )
+                Spacer(modifier = Modifier.weight(1f))
             }
 
             Spacer(modifier = Modifier.height(8.dp))

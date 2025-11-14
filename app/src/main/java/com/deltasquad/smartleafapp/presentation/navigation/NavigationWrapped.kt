@@ -91,11 +91,11 @@ fun NavigationWrapper(
                     Spacer(modifier = Modifier.height(32.dp))
 
                     DrawerItem(
-                        label = "Reports",
-                        iconRes = R.drawable.ic_reports,
+                        label = "Flowers",
+                        iconRes = R.drawable.ic_flower,
                         onClick = {
                             coroutineScope.launch { drawerState.close() }
-                            navController.navigate(Screen.Reports.route)
+                            navController.navigate(Screen.Flowers.route)
                         }
                     )
 

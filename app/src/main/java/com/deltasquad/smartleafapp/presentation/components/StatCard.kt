@@ -12,38 +12,52 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.material3.MaterialTheme
 
-@Composable
-fun StatCard(title: String, content: String) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
-        )
+//@Composable
+//fun StatCard(title: String, content: String) {
+//    Column(
+//        verticalArrangement = Arrangement.spacedBy(8.dp)
+//    ) {
+//        Text(
+//            text = title,
+//            style = MaterialTheme.typography.titleMedium,
+//            fontWeight = FontWeight.Bold
+//        )
+//
+//        Card(
+//            modifier = Modifier.fillMaxWidth(),
+//            elevation = CardDefaults.cardElevation(4.dp),
+//            shape = RoundedCornerShape(12.dp)
+//        ) {
+//            Column(modifier = Modifier.padding(16.dp)) {
+//                Spacer(modifier = Modifier.height(100.dp))
+//                Text(
+//                    text = content,
+//                    style = MaterialTheme.typography.bodyMedium
+//                )
+//            }
+//        }
+//    }
+//}
 
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            elevation = CardDefaults.cardElevation(4.dp),
-            shape = RoundedCornerShape(12.dp)
+@Composable
+fun StatCard(title: String, value: String) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        elevation = CardDefaults.cardElevation(6.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Spacer(modifier = Modifier.height(100.dp))
-                Text(
-                    text = content,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
+            Text(text = title, style = MaterialTheme.typography.titleSmall)
+            Text(
+                text = value,
+                style = MaterialTheme.typography.headlineSmall
+            )
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun StatCardPreview() {
-    StatCard(
-        title = "Escaneos por día",
-        content = "Hoy: 23 escaneos"
-    )
-}
+

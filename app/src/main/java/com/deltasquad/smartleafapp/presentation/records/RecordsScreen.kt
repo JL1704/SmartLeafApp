@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +16,7 @@ import com.deltasquad.smartleafapp.presentation.components.ContentCard
 import com.deltasquad.smartleafapp.presentation.components.SearchBar
 import com.deltasquad.smartleafapp.presentation.components.SectionLabel
 import com.deltasquad.smartleafapp.presentation.navigation.Screen
+import com.deltasquad.smartleafapp.presentation.theme.primaryPurple
 
 @Composable
 fun RecordsScreen(
@@ -32,37 +32,37 @@ fun RecordsScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
 
-        // 🔙 Barra superior
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp, bottom = 16.dp)
+                .padding(start = 16.dp, end = 16.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_back_24),
                     contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = primaryPurple,
                     modifier = Modifier
-                        .padding(start = 16.dp)
                         .size(28.dp)
-                        .clickable { navController.popBackStack() }
+                        .clickable {
+                            navController.popBackStack()
+                        }
                 )
-
                 Spacer(modifier = Modifier.weight(1f))
-
                 SectionLabel(
                     text = "Clasificaciones de Flores",
-                    modifier = Modifier.align(Alignment.CenterVertically)
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(end = 44.dp)
                 )
-
                 Spacer(modifier = Modifier.weight(1f))
             }
         }
-
         // 🔍 Barra de búsqueda
         SearchBar(
             query = query,
