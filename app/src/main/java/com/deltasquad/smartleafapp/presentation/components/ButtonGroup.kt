@@ -23,7 +23,7 @@ fun ButtonGroup(navController: NavHostController) {
         )
         NavigationButton(
             text = "Flowers",
-            iconRes = R.drawable.ic_reports,
+            iconRes = R.drawable.ic_flower,
             onClick = { navController.navigate(Screen.Flowers.route) }
         )
         NavigationButton(

@@ -14,14 +14,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.deltasquad.smartleafapp.presentation.theme.PlateScanAppTheme
+import com.deltasquad.smartleafapp.presentation.theme.primaryBlack
 import com.deltasquad.smartleafapp.presentation.theme.primaryBrown
+import com.deltasquad.smartleafapp.presentation.theme.primaryPurple
 import com.deltasquad.smartleafapp.presentation.theme.primaryWhite
 
 @Composable
 fun NavigationButton(
     text: String,
     iconRes: Int,
-    backgroundColor: Color = primaryBrown,
+    backgroundColor: Color = primaryPurple,
     contentColor: Color = primaryWhite,
     onClick: () -> Unit // <-- AÑADIR ESTO
 ) {
@@ -48,7 +50,7 @@ fun NavigationButton(
         Text(
             text = text,
             fontSize = 14.sp,
-            color = primaryBrown
+            color = primaryBlack
         )
     }
 }

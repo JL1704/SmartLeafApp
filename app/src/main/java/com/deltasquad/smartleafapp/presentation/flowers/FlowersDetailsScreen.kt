@@ -1,141 +1,306 @@
 package com.deltasquad.smartleafapp.presentation.flowers
 
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.*
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.deltasquad.smartleafapp.presentation.components.TagChip
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.deltasquad.smartleafapp.R
-import androidx.compose.ui.res.painterResource
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.clickable
+import com.deltasquad.smartleafapp.presentation.components.TagChip
 
+
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun DetailsFlowersScreen(
     flowerId: String,
     navController: NavController,
     viewModel: FlowersViewModel = viewModel()
 ) {
-    val selected by viewModel.selectedFlower.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
+    val flower by viewModel.selectedFlower.collectAsState()
+    val loading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    // Pedimos el detalle la primera vez que entra la pantalla
-    LaunchedEffect(key1 = flowerId) {
-        viewModel.getFlowerById(flowerId)
+    LaunchedEffect(flowerId) { viewModel.getFlowerById(flowerId) }
+
+    if (loading) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier
-            .fillMaxSize()
+    if (error != null) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text("Error: $error", color = MaterialTheme.colorScheme.error)
+        }
+        return
+    }
+
+    if (flower == null) return
+
+    val f = flower!!
+
+    Column(
+        modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(16.dp)
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
+    ) {
+
+        // ------------------------------------------------------------
+        // 🌸 HERO IMAGE
+        // ------------------------------------------------------------
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(320.dp)
         ) {
-            // Back icon
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_back_24),
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .size(28.dp)
-                        .clickable { navController.popBackStack() }
-                )
-            }
-
-            if (isLoading) {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-                return@Column
-            }
-
-            if (error != null) {
-                Text(text = "Error: ${error ?: "Desconocido"}")
-                return@Column
-            }
-
-            val flower = selected
-            if (flower == null) {
-                Text(text = "No se encontró la flor")
-                return@Column
-            }
-
             AsyncImage(
-                model = flower.imageUrl,
-                contentDescription = "Imagen principal",
+                model = f.imageUrl,
+                contentDescription = f.name,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+
+            // Overlay degradado
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(Color.Transparent, Color.Black.copy(alpha = 0.45f))
+                        )
+                    )
+            )
+
+            // Back button
+            Icon(
+                painter = painterResource(id = R.drawable.ic_back_24),
+                tint = Color.White,
+                contentDescription = "Back",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(220.dp)
+                    .padding(16.dp)
+                    .size(32.dp)
+                    .align(Alignment.TopStart)
+                    .clickable { navController.popBackStack() }
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = flower.name.ifEmpty { "Sin nombre" },
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            if (flower.scientificName.isNotEmpty()) {
+            // Nombre
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(20.dp)
+            ) {
                 Text(
-                    text = flower.scientificName,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    f.name,
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Black,
+                    color = Color.White
+                )
+                if (f.scientificName.isNotEmpty()) {
+                    Text(
+                        f.scientificName,
+                        fontSize = 16.sp,
+                        color = Color.White.copy(alpha = 0.8f)
+                    )
+                }
+            }
+        }
+
+        Spacer(Modifier.height(20.dp))
+
+        // ------------------------------------------------------------
+        // 🖼 EXTRA IMAGES (Carrusel)
+        // ------------------------------------------------------------
+        if (f.extraImages.isNotEmpty()) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
+                items(f.extraImages.size) { i ->
+                    AsyncImage(
+                        model = f.extraImages[i],
+                        contentDescription = "Extra image",
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(RoundedCornerShape(14.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+            Spacer(Modifier.height(20.dp))
+        }
+
+        // ------------------------------------------------------------
+        // 🏷 TAGS
+        // ------------------------------------------------------------
+        if (f.tags.isNotEmpty()) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
+                f.tags.forEach { TagChip(it) }
+            }
+            Spacer(Modifier.height(20.dp))
+        }
+
+        // ------------------------------------------------------------
+        // 📝 DESCRIPCIÓN
+        // ------------------------------------------------------------
+        PrettyCard(title = "Descripción") {
+            Text(
+                f.description.ifEmpty { "Sin descripción disponible." },
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Start
+                )
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        // ------------------------------------------------------------
+        // 🌱 INFORMACIÓN BOTÁNICA
+        // ------------------------------------------------------------
+        PrettyCard(title = "Información Botánica") {
+
+            InfoItem("Familia", f.family)
+            InfoItem("Origen", f.origin)
+            InfoItem("Floración", f.bloomSeason)
+            InfoItem("Toxicidad", f.toxicity)
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        // ------------------------------------------------------------
+        // ☀️ CUIDADOS (iconos)
+        // ------------------------------------------------------------
+        PrettyCard(title = "Cuidados") {
+
+            IconInfo(
+                icon = R.drawable.ic_water,
+                label = "Riego",
+                value = f.watering
+            )
+
+            IconInfo(
+                icon = R.drawable.ic_sun,
+                label = "Luz",
+                value = f.lightRequirements
+            )
+
+            IconInfo(
+                icon = R.drawable.ic_leaf,
+                label = "Suelo",
+                value = f.soilType
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            if (f.careTips.isNotEmpty()) {
+                Text(
+                    f.careTips,
+                    fontSize = 15.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Start
                 )
             }
+        }
 
-            Spacer(modifier = Modifier.height(8.dp))
+        Spacer(Modifier.height(16.dp))
 
-            if (flower.description.isNotEmpty()) {
-                Text(text = flower.description, fontSize = 16.sp)
-            }
+        // ------------------------------------------------------------
+        // 🔧 MANTENIMIENTO (chips)
+        // ------------------------------------------------------------
+        if (f.maintenance.isNotEmpty()) {
+            PrettyCard(title = "Mantenimiento") {
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            if (flower.tags.isNotEmpty()) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    flower.tags.forEach { tag ->
-                        TagChip(text = tag)
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    f.maintenance.forEach {
+                        AssistChip(
+                            onClick = {},
+                            label = { Text(it) },
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
                     }
                 }
             }
+        }
 
-            Spacer(modifier = Modifier.height(12.dp))
+        Spacer(Modifier.height(40.dp))
+    }
+}
 
-            // Información de cuidado resumida
-            if (flower.careTips.isNotEmpty()) {
-                Text(text = "Cuidados", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(text = flower.careTips)
-            }
+@Composable
+fun PrettyCard(
+    title: String,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    ElevatedCard(
+        shape = RoundedCornerShape(18.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(18.dp)) {
+            Text(
+                title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Spacer(Modifier.height(12.dp))
+            content()
+        }
+    }
+}
 
-            Spacer(modifier = Modifier.height(8.dp))
+@Composable
+fun InfoItem(label: String, value: String) {
+    if (value.isNotEmpty()) {
+        Column(modifier = Modifier.padding(vertical = 4.dp)) {
+            Text(label, fontWeight = FontWeight.SemiBold)
+            Text(
+                value,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+            )
+        }
+    }
+}
 
-            // Detalles adicionales (watering, light, soil)
-            if (flower.watering.isNotEmpty() || flower.lightRequirements.isNotEmpty() || flower.soilType.isNotEmpty()) {
-                Text(text = "Detalles", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                Spacer(modifier = Modifier.height(6.dp))
-                if (flower.watering.isNotEmpty()) Text(text = "Riego: ${flower.watering}")
-                if (flower.lightRequirements.isNotEmpty()) Text(text = "Luz: ${flower.lightRequirements}")
-                if (flower.soilType.isNotEmpty()) Text(text = "Suelo: ${flower.soilType}")
-            }
+@Composable
+fun IconInfo(icon: Int, label: String, value: String) {
+    if (value.isEmpty()) return
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(vertical = 6.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = icon),
+            contentDescription = label,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(26.dp)
+        )
+        Spacer(Modifier.width(10.dp))
+        Column {
+            Text(label, fontWeight = FontWeight.SemiBold)
+            Text(value, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
         }
     }
 }
