@@ -22,9 +22,9 @@ fun ButtonGroup(navController: NavHostController) {
             onClick = { navController.navigate(Screen.Records.route) }
         )
         NavigationButton(
-            text = "Reports",
+            text = "Flowers",
             iconRes = R.drawable.ic_reports,
-            onClick = { navController.navigate(Screen.Reports.route) }
+            onClick = { navController.navigate(Screen.Flowers.route) }
         )
         NavigationButton(
             text = "Stats",

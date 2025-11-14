@@ -43,6 +43,8 @@ import com.deltasquad.smartleafapp.presentation.detailsreport.DetailsReportScree
 import com.deltasquad.smartleafapp.presentation.reports.CreateReportScreen
 import kotlinx.coroutines.launch
 import com.deltasquad.smartleafapp.R
+import com.deltasquad.smartleafapp.presentation.flowers.DetailsFlowersScreen
+import com.deltasquad.smartleafapp.presentation.flowers.FlowersScreen
 import kotlinx.coroutines.flow.flow
 
 @Composable
@@ -176,11 +178,18 @@ fun NavigationWrapper(
                 }
                 composable(Screen.Records.route) { RecordsScreen(navController) }
                 composable(Screen.Reports.route) { ReportsScreen(navController) }
+                composable(Screen.Flowers.route) { FlowersScreen(navController) }
                 composable(Screen.Stats.route) {
                     val userId = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
                     StatsScreen(navController = navController, userId = userId)
                 }
-
+                composable(
+                    route = Screen.DetailsFlower.route,
+                    arguments = listOf(navArgument("flowerId") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val flowerId = backStackEntry.arguments?.getString("flowerId") ?: ""
+                    DetailsFlowersScreen(flowerId = flowerId, navController = navController)
+                }
                 composable("details/{flowerId}") { backStackEntry ->
                     val flowerId = backStackEntry.arguments?.getString("flowerId") ?: ""
                     DetailsScreen(flowerId = flowerId, navController)
@@ -200,7 +209,6 @@ fun NavigationWrapper(
                     val reportId = backStackEntry.arguments?.getString("reportId") ?: return@composable
                     DetailsReportScreen(reportId = reportId, navController = navController)
                 }
-
             }
         }
     }
